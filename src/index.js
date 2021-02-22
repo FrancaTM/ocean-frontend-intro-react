@@ -11,32 +11,20 @@ class Square extends React.Component {
     };
   }
 
-  handleClick() {
-    let nextMove = "X";
-
-    if (this.state.value === "X") {
-      nextMove = "O";
-    }
-
-    this.setState({
-      value: nextMove,
-    });
-  }
-
   render() {
     return (
-      <button className="square" onClick={() => this.handleClick()}>
+      <button className="square" onClick={this.props.onClick}>
         {this.state.value}
       </button>
     );
   }
 }
 
-function Board() {
+function Board(props) {
   return (
     <div>
       <div className="board-row">
-        <Square value="X" />
+        <Square value="X" onClick={() => props.onClick()} />
         <Square value="O" />
         <Square />
       </div>
@@ -54,16 +42,22 @@ function Board() {
   );
 }
 
-function Game() {
-  return (
-    <div className="game">
-      <div className="game-board">
-        <Board />
-      </div>
+class Game extends React.Component {
+  handleClick() {
+    alert("square foi clicado!");
+  }
 
-      <div className="game-info">Info</div>
-    </div>
-  );
+  render() {
+    return (
+      <div className="game">
+        <div className="game-board">
+          <Board onClick={() => this.handleClick()} />
+        </div>
+
+        <div className="game-info">Info</div>
+      </div>
+    );
+  }
 }
 
 ReactDOM.render(<Game />, document.getElementById("root"));
