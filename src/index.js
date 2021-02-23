@@ -2,46 +2,41 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-class Square extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: this.props.value,
-    };
-  }
-
-  render() {
-    return (
-      <button className="square" onClick={this.props.onClick}>
-        {this.state.value}
-      </button>
-    );
-  }
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
 }
 
 class Board extends React.Component {
-  renderSquare() {
-    return <Square value="X" onClick={() => this.props.onClick()} />;
+  renderSquare(index) {
+    return (
+      <Square
+        value={this.props.squares[index]}
+        onClick={() => this.props.onClick(index)}
+      />
+    );
   }
 
   render() {
     return (
       <div>
         <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
+          {this.renderSquare(0)}
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
         </div>
         <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
+          {this.renderSquare(3)}
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
         </div>
         <div className="board-row">
-          {this.renderSquare()}
-          {this.renderSquare()}
-          {this.renderSquare()}
+          {this.renderSquare(6)}
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
         </div>
       </div>
     );
@@ -49,15 +44,47 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
-  handleClick() {
-    alert("square foi clicado!");
+  constructor() {
+    super();
+
+    this.state = {
+      squares: Array(9).fill(null),
+      nextMove: "X",
+    };
+  }
+
+  handleClick(index) {
+    // console.log("handleClick", index);
+    const squares = this.state.squares;
+
+    if (squares[index]) {
+      return;
+    }
+
+    let nextMove = this.state.nextMove;
+
+    squares[index] = nextMove;
+
+    if (nextMove === "X") {
+      nextMove = "O";
+    } else {
+      nextMove = "X";
+    }
+
+    this.setState({
+      squares: squares,
+      nextMove: nextMove,
+    });
   }
 
   render() {
     return (
       <div className="game">
         <div className="game-board">
-          <Board onClick={() => this.handleClick()} />
+          <Board
+            squares={this.state.squares}
+            onClick={(index) => this.handleClick(index)}
+          />
         </div>
 
         <div className="game-info">Info</div>
